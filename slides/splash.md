@@ -1,2 +1,0 @@
-# grunt
-<http://gruntjs.com>
