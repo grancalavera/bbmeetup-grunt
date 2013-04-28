@@ -21,7 +21,7 @@ directories
 them requires cloning the repos into one of those directories.
 
 
-## Tip
+### Tip
 
 grunt will follow symlinks from `~/.grunt-init/`, that means you can:
 
