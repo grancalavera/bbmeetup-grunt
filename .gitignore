@@ -1,6 +1,6 @@
 .DS_Store
 node_modules
-www/js/lib
-www/css
-temp
+www/vendor
+tmp
 deploy
+*.sublime-workspace

@@ -24,99 +24,53 @@ module.exports = function(grunt) {
 
     //--------------------------------------------------------------------------
     //
-    // build
+    // Build presentation
     //
     //--------------------------------------------------------------------------
 
-    jshint: {
-      gruntfile: {
-        options: {
-          jshintrc: '.jshintrc'
-        },
-        src: 'Gruntfile.js'
+    concat: {
+      options: {
+        separator: '\n\n\n'
       },
-      src: {
-        options: {
-          jshintrc: 'www/js/.jshintrc'
-        },
-        src: ['www/js/main.js', 'www/js/app/**/*.js']
-      },
-      test: {
-        options: {
-          jshintrc: 'test/.jshintrc'
-        },
-        src: ['test/**/test.js', 'test/tests/**.js']
-      },
-    },
-    less: {
-      compile: {
-        files: {
-          'www/css/main.css': 'www/less/main.less'
-        }
-      }
-    },
-    qunit: {
-      files: ['test/**/*.html']
-    },
-    watch: {
-      less: {
-        files: ['www/less/**/*.less'],
-        tasks: ['compile:less']
-      },
-      gruntfile: {
-        files: '<%= jshint.gruntfile.src %>',
-        tasks: ['jshint:gruntfile']
-      },
-      unit: {
-        files: '<%= jshint.test.src %>',
-        tasks: ['jshint:test', 'qunit']
-      },
-      jshint: {
-        files: '<%= jshint.src.src %>',
-        tasks: ['jshint:src', 'qunit']
-      }
-    },
-
-    //--------------------------------------------------------------------------
-    //
-    // deploy
-    //
-    //--------------------------------------------------------------------------
-
-    // This is an example build file that demonstrates how to use the build
-    // system for require.js.
-    // https://github.com/jrburke/r.js/blob/master/build/example.build.js
-
-    requirejs: {
-      build: {
-        options: {
-          appDir: 'www',
-          mainConfigFile: 'www/js/main.js',
-          dir: 'tmp',
-          modules: [
-            {name: 'app/<%= pkg.name %>'}
-          ],
-          optimize: 'none'//,
-          // uglify: {
-          //   toplevel: true,
-          //   ascii_only: true,
-          //   beautify: true,
-          //   max_line_length: 1000
-          // }
-        }
+      readme: {
+        src: [
+          'slides/splash.md',
+          'slides/npm-crash-course.md',
+          'slides/getting-started.md',
+          'slides/creating-a-new-project-from-scratch.md',
+          'slides/working-with-tasks.md',
+          'slides/project-scaffolding.md',
+          'slides/workflow.md',
+          'slides/controversy.md',
+          'slides/thanks.md'
+        ],
+        dest: 'readme.md'
       }
     },
     copy: {
-      build: {
-        files: [
-          {expand: true, cwd: 'tmp', src: ['**', '!less/**', '!js/lib/**', 'js/lib/require.js'], dest: 'deploy'}
-        ]
+      preso: {
+        files: [{src: 'readme.md', dest:'www/bbmeetup-grunt.md'}]
       }
+    },
+    regarde: {
+      slides: {
+        files: ['Gruntfile.js', 'slides/*.md'],
+        tasks: ['clean', 'concat', 'copy']
+      },
+      livereload: {
+        files: ['www/**.*'],
+        tasks: ['livereload']
+      }
+    },
+    watch: {
+    },
+    clean: {
+      less: ['www/bbmeetup-grunt.md', 'readme.md']
     },
 
     //--------------------------------------------------------------------------
     //
-    // dev-server
+    // Livereload
     //
     //--------------------------------------------------------------------------
 
@@ -135,25 +89,8 @@ module.exports = function(grunt) {
         }
       }
     },
-    regarde: {
-      livereload: {
-        files: ['www/*.html', 'www/js/**/*', 'www/css/**/*'],
-        tasks: ['livereload']
-      }
-    },
     livereload: {
       port: 35729
-    },
-
-    //--------------------------------------------------------------------------
-    //
-    // misc and mixed
-    //
-    //--------------------------------------------------------------------------
-
-    clean: {
-      deploy: ['tmp', 'deploy'],
-      less: ['www/css']
     }
 
   });
@@ -167,38 +104,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-livereload');
-  grunt.loadNpmTasks('grunt-contrib-qunit');
-  grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-regarde');
+  grunt.loadNpmTasks('grunt-contrib-concat');
 
-  //--------------------------------------------------------------------------
-  //
-  // Proxies
-  //
-  //--------------------------------------------------------------------------
-
-  grunt.registerTask('compile:less', ['clean:less', 'less:compile']);
-
-  //--------------------------------------------------------------------------
-  //
-  // Groups
-  //
-  //--------------------------------------------------------------------------
-
-  grunt.registerTask('build', ['compile:less', 'jshint', 'qunit']);
-  grunt.registerTask('dev-server', ['livereload-start', 'connect', 'regarde']);
-  grunt.registerTask('deploy', ['clean:deploy', 'build', 'requirejs', 'copy']);
-
-  //--------------------------------------------------------------------------
-  //
-  // Default
-  //
-  //--------------------------------------------------------------------------
-
-  grunt.registerTask('default', ['clean', 'build', 'watch']);
+  grunt.registerTask('default', ['clean', 'concat', 'copy', 'livereload-start', 'connect', 'regarde']);
 
 };
