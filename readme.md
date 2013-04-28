@@ -2,7 +2,7 @@
 
 grunt, the JavaScript task runner
 
-## Outile (WIP)
+## Outline (WIP)
 
 NPM crash course
 
@@ -94,4 +94,5 @@ Controversy
    * Why not http://blog.millermedeiros.com/node-js-ant-grunt-and-other-build-tools/
 
 Reference
+
     * http://gruntjs.com
