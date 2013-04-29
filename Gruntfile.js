@@ -35,6 +35,7 @@ module.exports = function(grunt) {
       readme: {
         src: [
           'slides/splash.md',
+          'slides/about.md',
           'slides/npm-crash-course.md',
           'slides/getting-started.md',
           'slides/creating-a-new-project-from-scratch.md',
